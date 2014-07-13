@@ -6,6 +6,7 @@ requires C++11.
 
 All places I could find code to perform the cartesian product had at least one
 of the following issues:
+
 1. Assumes that all containers are of a certain type (most usually vector),
 although they could be modified to handle other types easily;
 2. Provides code that collects a vector of tuples with each combination of
