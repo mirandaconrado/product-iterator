@@ -17,16 +17,18 @@ wrap its code with other code to perform the combinations.
 This container is designed to be used like any other, making it very easy for
 the user. Only a constant iterator is provided, as a modifiable one doesn't make
 much sense to me. The iterator's value is a tuple, so it can be accessed as
-std::get<N>(\*it). However, due to some details with range-based for, getting
+`std::get<N>(*it)`. However, due to some details with range-based for, getting
 the whole tuple is more expensive and an alternative (and more preferable)
 accessor it.get<N>() is provided.
 
 Example of use:
+```
 auto prod = make_cartesian_product(vector<int>({1,2}), vector<int>({3,4}));
 for (auto it = prod.begin(); it != prod.end(); ++it) {
   // Provides a std::tuple<int,int> with the values from the constructor
-  \*it;
+  *it;
   // Access to a single element of the tuple is optimized and the following
   // comparison always holds
-   it.get<0>() == std::get<0>(\*it);
+  it.get<0>() == std::get<0>(*it);
 }
+```
