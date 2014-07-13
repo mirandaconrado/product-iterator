@@ -6,12 +6,12 @@ requires C++11.
 
 All places I could find code to perform the cartesian product had at least one
 of the following issues:
-1) Assumes that all containers are of a certain type (most usually vector),
+1. Assumes that all containers are of a certain type (most usually vector),
 although they could be modified to handle other types easily;
-2) Provides code that collects a vector of tuples with each combination of
+2. Provides code that collects a vector of tuples with each combination of
 values from the containers, which requires O(M^N) memory, where M is the size of
 each container and N is the number of containers;
-3) The user could only apply a function to each combination or would have to
+3. The user could only apply a function to each combination or would have to
 wrap its code with other code to perform the combinations.
 
 This container is designed to be used like any other, making it very easy for
