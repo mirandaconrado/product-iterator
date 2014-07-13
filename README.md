@@ -17,9 +17,9 @@ wrap its code with other code to perform the combinations.
 This container is designed to be used like any other, making it very easy for
 the user. Only a constant iterator is provided, as a modifiable one doesn't make
 much sense to me. The iterator's value is a tuple, so it can be accessed as
-`std::get<N>(*it)`. However, due to some details with range-based for, getting
-the whole tuple is more expensive and an alternative (and more preferable)
-accessor it.get<N>() is provided.
+`std::get<N>(*it)`. However, due to some details to support range-based for,
+getting the whole tuple is more expensive and an alternative (and more
+preferable) accessor `it.get<N>()` is provided.
 
 Example of use:
 ```
