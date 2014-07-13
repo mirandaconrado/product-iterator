@@ -1,8 +1,8 @@
 cartesian-product
 =================
 
-C++ container that performs the cartesian product of many containers. Requires
-C++11.
+C++ container that performs the cartesian product of many containers, and
+requires C++11.
 
 All places I could find code to perform the cartesian product had at least one
 of the following issues:
@@ -20,6 +20,12 @@ much sense to me. The iterator's value is a tuple, so it can be accessed as
 `std::get<N>(*it)`. However, due to some details to support range-based for,
 getting the whole tuple is more expensive and an alternative (and more
 preferable) accessor `it.get<N>()` is provided.
+
+If any of the containers provided are MoveAssignable, then it's moved.
+Otherwise, it has to be copied to avoid invalid references.
+
+A helper function `make_cartesian_product` is provided to create the
+CartesianProduct object.
 
 Example of use:
 ```
