@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <vector>
 
-TEST(CartesianProduct, PermanentObjectsUsedInConstruction) {
+TEST(CartesianProductTest, PermanentObjectsUsedInConstruction) {
   std::vector<int> v1({1,2});
   std::vector<int> v2({4,5,6});
   auto prod = make_cartesian_product(v1, v2);
@@ -48,7 +48,7 @@ TEST(CartesianProduct, PermanentObjectsUsedInConstruction) {
   ASSERT_EQ(prod.end(), it);
 }
 
-TEST(CartesianProduct, TemporaryObjectsUsedInConstruction) {
+TEST(CartesianProductTest, TemporaryObjectsUsedInConstruction) {
   auto prod = make_cartesian_product(std::vector<int>({1,2}),
                                      std::vector<int>({4,5,6}));
 
