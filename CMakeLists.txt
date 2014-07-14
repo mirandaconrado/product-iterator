@@ -3,6 +3,8 @@ project(cartesian-product)
 
 find_package(GTest REQUIRED)
 
+# gcc 4.8.3 doesn't seem to support the wacky stuff this lib does
+set(CMAKE_CXX_COMPILER "clang++")
 include_directories(include)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Werror")

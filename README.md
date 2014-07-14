@@ -2,7 +2,7 @@ cartesian-product
 =================
 
 C++ container that performs the cartesian product of many containers, and
-requires C++11.
+requires C++11. GCC 4.8.3 fails to compile the test case for some reason.
 
 All places I could find code to perform the cartesian product had at least one
 of the following issues:
