@@ -56,7 +56,7 @@ CartesianProduct<Types...>::const_iterator::operator=(
 }
 
 // Helper methods to operator++.
-template <std::size_t I, class T1, class T2>
+template <size_t I, class T1, class T2>
 typename std::enable_if<(I == std::tuple_size<T1>::value), void>::type
 advance(T1& it_tuple, T2& containers) { }
 
@@ -67,7 +67,7 @@ advance(T1& it_tuple, T2& containers) { }
 // how it will equal the final iterator.
 // 2) this isn't the last iterator, so it resets it to begin and advances the
 // next iterator.
-template <std::size_t I, class T1, class T2>
+template <size_t I, class T1, class T2>
 typename std::enable_if<(I < std::tuple_size<T1>::value), void>::type
 advance(T1& it_tuple, T2& containers) {
   ++std::get<I>(it_tuple);
@@ -119,7 +119,7 @@ bool CartesianProduct<Types...>::const_iterator::operator!=(
 
 // Helper methods to operator* and operator->. Just collect each tuple position
 // of value_type as a reference to the current position.
-template <std::size_t I, class Ret, class T,
+template <size_t I, class Ret, class T,
          typename std::enable_if<(I==std::tuple_size<T>::value-1),int>::type=0>
          auto
          make_value_type(T const& tuple) ->
@@ -133,7 +133,7 @@ template <std::size_t I, class Ret, class T,
     >(*std::get<I>(tuple));
 }
 
-template <std::size_t I, class Ret, class T,
+template <size_t I, class Ret, class T,
          typename std::enable_if<(I<std::tuple_size<T>::value-1),int>::type=0>
          auto
          make_value_type(T const& tuple) ->
@@ -171,7 +171,7 @@ CartesianProduct<Types...>::const_iterator::operator->() const {
 }
 
 template <class... Types>
-template <std::size_t I>
+template <size_t I>
 typename std::tuple_element<I,
          typename CartesianProduct<Types...>::value_type>::type
          const &
@@ -194,7 +194,7 @@ CartesianProduct<Types...>::CartesianProduct(Types&&... containers):
   }
 
 template <class... Types>
-template <std::size_t I, class T>
+template <size_t I, class T>
 void CartesianProduct<Types...>::CopyContainers(T const& container) {
   std::get<I>(containers_) = container;
   // Gets the begin from the local copy. Don't use container.begin() as it may
@@ -203,7 +203,7 @@ void CartesianProduct<Types...>::CopyContainers(T const& container) {
 }
 
 template <class... Types>
-template <std::size_t I, class T>
+template <size_t I, class T>
 void CartesianProduct<Types...>::CopyContainers(T&& container) {
   std::get<I>(containers_) = std::move(container);
   // Gets the begin from the local copy. Don't use container.begin() as it may
@@ -212,7 +212,7 @@ void CartesianProduct<Types...>::CopyContainers(T&& container) {
 }
 
 template <class... Types>
-template <std::size_t I, class T, class... Types_>
+template <size_t I, class T, class... Types_>
 void CartesianProduct<Types...>::CopyContainers(T const& container,
     Types_&&... containers) {
   std::get<I>(containers_) = container;
@@ -223,7 +223,7 @@ void CartesianProduct<Types...>::CopyContainers(T const& container,
 }
 
 template <class... Types>
-template <std::size_t I, class T, class... Types_>
+template <size_t I, class T, class... Types_>
 void CartesianProduct<Types...>::CopyContainers(T&& container,
     Types_&&... containers) {
   std::get<I>(containers_) = std::move(container);

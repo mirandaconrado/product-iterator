@@ -80,7 +80,7 @@ class CartesianProduct {
         // Enables access to a single value instead of the whole tuple. This
         // method is preffered to the operator* as it doesn't require tuple
         // construction. Behaves like std::get<I>(*iterator).
-        template <std::size_t I>
+        template <size_t I>
           typename std::tuple_element<I, value_type>::type const&
           get() const;
 
@@ -121,13 +121,13 @@ class CartesianProduct {
 
   private:
     // Methods to copy containers arguments into internal tuples.
-    template <std::size_t I, class T>
+    template <size_t I, class T>
       void CopyContainers(T const& container);
-    template <std::size_t I, class T>
+    template <size_t I, class T>
       void CopyContainers(T&& container);
-    template <std::size_t I, class T, class... Types_>
+    template <size_t I, class T, class... Types_>
       void CopyContainers(T const& container, Types_&&... containers);
-    template <std::size_t I, class T, class... Types_>
+    template <size_t I, class T, class... Types_>
       void CopyContainers(T&& container, Types_&&... containers);
 
     container_type containers_;
