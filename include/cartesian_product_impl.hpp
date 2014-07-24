@@ -27,6 +27,8 @@ SOFTWARE.
 #ifndef __CARTESIAN_PRODUCT_IMPL_HPP__
 #define __CARTESIAN_PRODUCT_IMPL_HPP__
 
+#include "cartesian_product.hpp"
+
 template <class... Types>
 CartesianProduct<Types...>::const_iterator::const_iterator(
     const_iterator const& other):
