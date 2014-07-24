@@ -72,11 +72,11 @@ typename std::enable_if<(I < std::tuple_size<T1>::value), void>::type
 advance(T1& it_tuple, T2& containers) {
   ++std::get<I>(it_tuple);
 
-  if (std::get<I>(it_tuple) == std::get<I>(containers).end()) {
+  if (std::get<I>(it_tuple) == std::get<I>(containers).cend()) {
     if (I == std::tuple_size<T1>::value-1)
       return;
 
-    std::get<I>(it_tuple) = std::get<I>(containers).begin();
+    std::get<I>(it_tuple) = std::get<I>(containers).cbegin();
     advance<I + 1>(it_tuple, containers);
   }
 }
@@ -86,7 +86,7 @@ typename CartesianProduct<Types...>::const_iterator&
 CartesianProduct<Types...>::const_iterator::operator++() {
   // Avoids incrementing if we have already reached the end.
   if (std::get<sizeof...(Types)-1>(it_tuple_) ==
-      std::get<sizeof...(Types)-1>(*containers_).end())
+      std::get<sizeof...(Types)-1>(*containers_).cend())
     return *this;
 
   advance<0>(it_tuple_, *containers_);
@@ -190,7 +190,7 @@ CartesianProduct<Types...>::CartesianProduct(Types&&... containers):
     CopyContainers<0>(std::forward<Types>(containers)...);
     end_ = begin_;
     std::get<sizeof...(Types)-1>(end_.it_tuple_) =
-      std::get<sizeof...(Types)-1>(containers_).end();
+      std::get<sizeof...(Types)-1>(containers_).cend();
   }
 
 template <class... Types>
@@ -199,7 +199,7 @@ void CartesianProduct<Types...>::CopyContainers(T const& container) {
   std::get<I>(containers_) = container;
   // Gets the begin from the local copy. Don't use container.begin() as it may
   // become invalid!
-  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).begin();
+  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).cbegin();
 }
 
 template <class... Types>
@@ -208,7 +208,7 @@ void CartesianProduct<Types...>::CopyContainers(T&& container) {
   std::get<I>(containers_) = std::move(container);
   // Gets the begin from the local copy. Don't use container.begin() as it may
   // become invalid!
-  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).begin();
+  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).cbegin();
 }
 
 template <class... Types>
@@ -218,7 +218,7 @@ void CartesianProduct<Types...>::CopyContainers(T const& container,
   std::get<I>(containers_) = container;
   // Gets the begin from the local copy. Don't use container.begin() as it may
   // become invalid!
-  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).begin();
+  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).cbegin();
   CopyContainers<I + 1>(std::forward<Types_>(containers)...);
 }
 
@@ -229,19 +229,19 @@ void CartesianProduct<Types...>::CopyContainers(T&& container,
   std::get<I>(containers_) = std::move(container);
   // Gets the begin from the local copy. Don't use container.begin() as it may
   // become invalid!
-  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).begin();
+  std::get<I>(begin_.it_tuple_) = std::get<I>(containers_).cbegin();
   CopyContainers<I + 1>(std::forward<Types_>(containers)...);
 }
 
 template <class... Types>
 typename CartesianProduct<Types...>::const_iterator const&
-CartesianProduct<Types...>::begin() const {
+CartesianProduct<Types...>::cbegin() const {
   return begin_;
 }
 
 template <class... Types>
 typename CartesianProduct<Types...>::const_iterator const&
-CartesianProduct<Types...>::end() const {
+CartesianProduct<Types...>::cend() const {
   return end_;
 }
 

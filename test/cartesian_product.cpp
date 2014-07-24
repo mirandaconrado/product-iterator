@@ -33,7 +33,7 @@ TEST(CartesianProductTest, PermanentObjectsUsedInConstruction) {
   std::vector<int> v2({4,5,6});
   auto prod = make_cartesian_product(v1, v2);
 
-  auto it = prod.begin();
+  auto it = prod.cbegin();
 
   for (int j = 4; j <= 6; j++) {
     for (int i = 1; i <= 2; i++) {
@@ -45,14 +45,14 @@ TEST(CartesianProductTest, PermanentObjectsUsedInConstruction) {
     }
   }
 
-  ASSERT_EQ(prod.end(), it);
+  ASSERT_EQ(prod.cend(), it);
 }
 
 TEST(CartesianProductTest, TemporaryObjectsUsedInConstruction) {
   auto prod = make_cartesian_product(std::vector<int>({1,2}),
                                      std::vector<int>({4,5,6}));
 
-  auto it = prod.begin();
+  auto it = prod.cbegin();
 
   for (int j = 4; j <= 6; j++) {
     for (int i = 1; i <= 2; i++) {
@@ -64,5 +64,5 @@ TEST(CartesianProductTest, TemporaryObjectsUsedInConstruction) {
     }
   }
 
-  ASSERT_EQ(prod.end(), it);
+  ASSERT_EQ(prod.cend(), it);
 }

@@ -34,7 +34,7 @@ SOFTWARE.
 //
 // Example:
 // auto prod = make_cartesian_product(vector<int>({1,2}), vector<int>({3,4}));
-// for (auto it = prod.begin(); it != prod.end(); ++it) {
+// for (auto it = prod.cbegin(); it != prod.cend(); ++it) {
 //   // Provides a std::tuple<int,int> with the values from the constructor
 //   *it;
 //   // Access to a single element of the tuple is optimized and the following
@@ -116,8 +116,8 @@ class CartesianProduct {
     // const_iterator.
     CartesianProduct(Types&&... containers);
 
-    const_iterator const& begin() const;
-    const_iterator const& end() const;
+    const_iterator const& cbegin() const;
+    const_iterator const& cend() const;
 
   private:
     // Methods to copy containers arguments into internal tuples.
