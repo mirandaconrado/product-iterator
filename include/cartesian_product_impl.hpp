@@ -91,6 +91,9 @@ advance(T1& it_tuple, T2& containers) {
 template <class... Types>
 typename CartesianProduct<Types...>::const_iterator&
 CartesianProduct<Types...>::const_iterator::operator++() {
+  if (containers_ == nullptr)
+    return *this;
+
   // Avoids incrementing if we have already reached the end.
   if (std::get<sizeof...(Types)-1>(it_tuple_) ==
       std::get<sizeof...(Types)-1>(*containers_).cend())
