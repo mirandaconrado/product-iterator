@@ -65,6 +65,7 @@ class CartesianProduct {
     // file.
     class const_iterator {
       public:
+        const_iterator();
         const_iterator(const_iterator const& other);
         ~const_iterator();
         const_iterator& operator=(const_iterator const& other);

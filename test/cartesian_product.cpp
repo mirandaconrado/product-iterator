@@ -66,3 +66,22 @@ TEST(CartesianProductTest, TemporaryObjectsUsedInConstruction) {
 
   ASSERT_EQ(prod.cend(), it);
 }
+
+TEST(CartesianProductTest, IteratorDefaultConstructible) {
+  auto prod = make_cartesian_product(std::vector<int>({1,2}),
+                                     std::vector<int>({4,5,6}));
+
+  decltype(prod)::const_iterator it;
+}
+
+TEST(CartesianProductTest, IteratorComparison) {
+  auto prod = make_cartesian_product(std::vector<int>({1,2}),
+                                     std::vector<int>({4,5,6}));
+
+  for (auto it1 = prod.cbegin(), it2 = prod.cbegin();
+       it1 != prod.cend();
+       ++it1) {
+    ASSERT_EQ(it1, it2++);
+    ASSERT_NE(it1, it2);
+  }
+}

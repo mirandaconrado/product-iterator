@@ -30,6 +30,11 @@ SOFTWARE.
 #include "cartesian_product.hpp"
 
 template <class... Types>
+CartesianProduct<Types...>::const_iterator::const_iterator():
+  current_tuple_(nullptr),
+  containers_(nullptr) { }
+
+template <class... Types>
 CartesianProduct<Types...>::const_iterator::const_iterator(
     const_iterator const& other):
   current_tuple_(nullptr),
