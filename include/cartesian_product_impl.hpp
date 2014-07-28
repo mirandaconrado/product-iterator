@@ -161,9 +161,7 @@ decltype(std::tuple_cat(
 template <class... Types>
 typename CartesianProduct<Types...>::value_type const&
 CartesianProduct<Types...>::const_iterator::operator*() const {
-  if (current_tuple_ == nullptr)
-    current_tuple_ = new value_type(make_value_type<0,value_type>(it_tuple_));
-  return *current_tuple_;
+  return *operator->();
 }
 
 template <class... Types>
