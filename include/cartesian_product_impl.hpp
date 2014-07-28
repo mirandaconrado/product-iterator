@@ -36,17 +36,17 @@ CartesianProduct<Types...>::const_iterator::const_iterator(
   it_tuple_(other.it_tuple_),
   containers_(other.containers_) { }
 
-  template <class... Types>
-  CartesianProduct<Types...>::const_iterator::const_iterator(
-      container_type const* base_container):
-    current_tuple_(nullptr),
-    containers_(base_container) { }
+template <class... Types>
+CartesianProduct<Types...>::const_iterator::const_iterator(
+    container_type const* base_container):
+  current_tuple_(nullptr),
+  containers_(base_container) { }
 
-    template <class... Types>
-    CartesianProduct<Types...>::const_iterator::~const_iterator() {
-      if (current_tuple_ != nullptr)
-        delete current_tuple_;
-    }
+template <class... Types>
+CartesianProduct<Types...>::const_iterator::~const_iterator() {
+  if (current_tuple_ != nullptr)
+    delete current_tuple_;
+}
 
 template <class... Types>
 typename CartesianProduct<Types...>::const_iterator&
@@ -122,13 +122,12 @@ bool CartesianProduct<Types...>::const_iterator::operator!=(
 // Helper methods to operator* and operator->. Just collect each tuple position
 // of value_type as a reference to the current position.
 template <size_t I, class Ret, class T,
-         typename std::enable_if<(I==std::tuple_size<T>::value-1),int>::type=0>
-         auto
-         make_value_type(T const& tuple) ->
-         decltype(
-             std::tuple<
-             typename std::tuple_element<I,Ret>::type const&
-             >(*std::get<I>(tuple)))
+          typename std::enable_if<(I==std::tuple_size<T>::value-1),int>::type=0>
+auto make_value_type(T const& tuple) ->
+decltype(
+    std::tuple<
+    typename std::tuple_element<I,Ret>::type const&
+    >(*std::get<I>(tuple)))
 {
   return std::tuple<
     typename std::tuple_element<I,Ret>::type const&
@@ -136,14 +135,13 @@ template <size_t I, class Ret, class T,
 }
 
 template <size_t I, class Ret, class T,
-         typename std::enable_if<(I<std::tuple_size<T>::value-1),int>::type=0>
-         auto
-         make_value_type(T const& tuple) ->
-         decltype(std::tuple_cat(
-               std::tuple<
-               typename std::tuple_element<I,Ret>::type const&
-               >(*std::get<I>(tuple)),
-               make_value_type<I+1,Ret>(tuple)))
+          typename std::enable_if<(I<std::tuple_size<T>::value-1),int>::type=0>
+auto make_value_type(T const& tuple) ->
+decltype(std::tuple_cat(
+      std::tuple<
+      typename std::tuple_element<I,Ret>::type const&
+      >(*std::get<I>(tuple)),
+      make_value_type<I+1,Ret>(tuple)))
 {
   return std::tuple_cat(
       std::tuple<
@@ -155,32 +153,28 @@ template <size_t I, class Ret, class T,
 template <class... Types>
 typename CartesianProduct<Types...>::value_type const&
 CartesianProduct<Types...>::const_iterator::operator*() const {
-  if (current_tuple_ != nullptr)
-    return *current_tuple_;
-
-  current_tuple_ = new value_type(make_value_type<0,value_type>(it_tuple_));
+  if (current_tuple_ == nullptr)
+    current_tuple_ = new value_type(make_value_type<0,value_type>(it_tuple_));
   return *current_tuple_;
 }
 
 template <class... Types>
 typename CartesianProduct<Types...>::value_type const*
 CartesianProduct<Types...>::const_iterator::operator->() const {
-  if (current_tuple_ != nullptr)
-    return current_tuple_;
-
-  current_tuple_ = new value_type(make_value_type<0,value_type>(it_tuple_));
+  if (current_tuple_ == nullptr)
+    current_tuple_ = new value_type(make_value_type<0,value_type>(it_tuple_));
   return current_tuple_;
 }
 
 template <class... Types>
 template <size_t I>
-typename std::tuple_element<I,
-         typename CartesianProduct<Types...>::value_type>::type
-         const &
-         CartesianProduct<Types...>::const_iterator::get() const {
-           // As only a single value is needed, gathers it from its iterator.
-           return *std::get<I>(it_tuple_);
-         }
+typename
+std::tuple_element<I, typename CartesianProduct<Types...>::value_type>::type
+const &
+CartesianProduct<Types...>::const_iterator::get() const {
+  // As only a single value is needed, gathers it from its iterator.
+  return *std::get<I>(it_tuple_);
+}
 
 // Copies the containers and the begin of each one of them. Also creates the end
 // iterator, which is a copy of the begin, except that the last iterator is at

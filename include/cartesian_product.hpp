@@ -103,7 +103,7 @@ class CartesianProduct {
         // If it could be "auto it", then we wouldn't need to keep reallocating
         // this thing. We also can't keep a single copy because each element of
         // the tuple is a const&, so it can't be constructed by itself.
-        mutable value_type *current_tuple_;
+        mutable value_type* current_tuple_;
 
         std::tuple<
           typename std::remove_reference<Types>::type::const_iterator...
