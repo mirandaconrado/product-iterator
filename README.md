@@ -1,39 +1,43 @@
-cartesian-product
+Product Iterator
 =================
 
-C++ container that performs the cartesian product of many containers, and
-requires C++11. GCC 4.8.3 fails to compile the test case for some reason.
+C++ iterator that performs the cartesian product of many containers. Requires
+C++11 and boost. GCC 4.8.3 fails to compile the test case for some reason, so
+clang is used instead.
 
 All places I could find code to perform the cartesian product had at least one
 of the following issues:
 
 1. Assumes that all containers are of a certain type (most usually vector),
-although they could be modified to handle other types easily;
+although they could be modified to handle other types easily, but only for fixed
+types;
 2. Provides code that collects a vector of tuples with each combination of
 values from the containers, which requires O(N\*M^N) memory, where M is the size
 of each container and N is the number of containers;
 3. The user could only apply a function to each combination or would have to
 wrap its code with other code to perform the combinations.
 
-The class provided is a container that requires only O(N) memory for the
-iterator and O(N\*M) memory for the original containers. Only a constant
-iterator is provided, as a modifiable one doesn't make much sense to me. The
-iterator's value is a tuple, so its values can be accessed as
-`std::get<N>(*it)`. However, due to some details to support range-based for,
-getting the whole tuple is more expensive and an alternative (and more
-preferable) accessor `it.get<N>()` is provided.
+The iterator provided requires only O(N) memory and builds the combinations of
+references iteratively, implementing the "forward iterator" concept and allowing
+it to be used with other code that requires iterators. The iterator's value is a
+tuple, so its values can be accessed as `std::get<N>(*it)`. However, due to some
+details to support range-based for, getting the whole tuple is more expensive
+and an alternative (and more preferable) method `it.get<N>()` is provided.
 
-If any of the containers provided are MoveAssignable, then it's moved.
-Otherwise, it has to be copied to avoid invalid references.
+The iterator also provides a method `get_end()`, which returns the end iterator
+associated with the containers used during construction.
 
-A helper function `make_cartesian_product` is provided to create the
-CartesianProduct object.
+A helper function `make_product_iterator` is provided to create the
+iterator.
 
 Example of use:
 ```
-auto prod = make_cartesian_product(vector<int>({1,2}), vector<int>({3,4}));
-for (auto it = prod.cbegin(); it != prod.cend(); ++it) {
-  // Provides a std::tuple<int,int> with the values from the constructor
+vector<int> c1({1,2});
+vector<char> c2({'a','b'});
+auto it = make_product_iterator(c1, c2);
+auto end = it.get_end();
+for (; it != end; ++it) {
+  // Provides a std::tuple<int,char> with the values from the constructor
   *it;
   // Access to a single element of the tuple is optimized and the following
   // comparison always holds
