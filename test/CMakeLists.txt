@@ -1,5 +1,5 @@
 add_executable(run_tests.bin EXCLUDE_FROM_ALL
-  cartesian_product.cpp
+  product_iterator.cpp
 )
 
 target_link_libraries(run_tests.bin gtest gtest_main

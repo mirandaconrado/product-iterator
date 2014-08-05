@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "cartesian_product.hpp"
+#include "product_iterator.hpp"
 
 #include <gtest/gtest.h>
 
 #include <vector>
 
-class CartesianProductTest: public ::testing::Test {
+class ProductIteratorTest: public ::testing::Test {
   protected:
     std::vector<int> v1, v2;
     const int min_i = 1, max_i = 2, min_j = 4, max_j = 6;
@@ -44,59 +44,19 @@ class CartesianProductTest: public ::testing::Test {
     }
 };
 
-TEST_F(CartesianProductTest, PermanentObjectsUsedInConstruction) {
-  auto prod = make_cartesian_product(v1, v2);
+TEST_F(ProductIteratorTest, DoubleLoop) {
+  auto it = make_product_iterator(v1, v2);
+  auto end = it.get_end();
 
-  // Changes to make sure the product copied them
-  for (auto& it : v1) it *= 2;
-  for (auto& it : v2) it *= 2;
-
-  auto it = prod.cbegin();
-
-  for (int j = min_j; j <= max_j; j++) {
-    for (int i = min_i; i <= max_i; i++) {
-      ASSERT_EQ(i, std::get<0>(*it));
-      ASSERT_EQ(i, it.get<0>());
-      ASSERT_EQ(j, std::get<1>(*it));
-      ASSERT_EQ(j, it.get<1>());
+  for (int i = min_i; i <= max_i; i++) {
+    for (int j = min_j; j <= max_j; j++) {
+      EXPECT_EQ(i, std::get<0>(*it));
+      EXPECT_EQ(i, it.get<0>());
+      EXPECT_EQ(j, std::get<1>(*it));
+      EXPECT_EQ(j, it.get<1>());
       ++it;
     }
   }
 
-  ASSERT_EQ(prod.cend(), it);
-}
-
-TEST_F(CartesianProductTest, TemporaryObjectsUsedInConstruction) {
-  auto prod = make_cartesian_product(std::move(v1), std::move(v2));
-
-  auto it = prod.cbegin();
-
-  for (int j = min_j; j <= max_j; j++) {
-    for (int i = min_i; i <= max_i; i++) {
-      ASSERT_EQ(i, std::get<0>(*it));
-      ASSERT_EQ(i, it.get<0>());
-      ASSERT_EQ(j, std::get<1>(*it));
-      ASSERT_EQ(j, it.get<1>());
-      ++it;
-    }
-  }
-
-  ASSERT_EQ(prod.cend(), it);
-}
-
-TEST_F(CartesianProductTest, IteratorDefaultConstructible) {
-  auto prod = make_cartesian_product(std::move(v1), std::move(v2));
-
-  decltype(prod)::const_iterator it;
-}
-
-TEST_F(CartesianProductTest, IteratorComparison) {
-  auto prod = make_cartesian_product(std::move(v1), std::move(v2));
-
-  for (auto it1 = prod.cbegin(), it2 = prod.cbegin();
-       it1 != prod.cend();
-       ++it1) {
-    ASSERT_EQ(it1, it2++);
-    ASSERT_NE(it1, it2);
-  }
+  EXPECT_EQ(end, it);
 }
