@@ -33,6 +33,15 @@ product_iterator<Containers...>::product_iterator():
 
 template <class... Containers>
 product_iterator<Containers...>::product_iterator(
+    product_iterator const& other):
+  current_tuple_(nullptr) {
+    begin_ = other.begin_;
+    end_ = other.end_;
+    current_ = other.current_;
+}
+
+template <class... Containers>
+product_iterator<Containers...>::product_iterator(
     Containers const&... containers):
   current_tuple_(nullptr) {
     copy_iterator<0>(containers...);
@@ -45,12 +54,24 @@ product_iterator<Containers...>::~product_iterator() {
 }
 
 template <class... Containers>
+product_iterator<Containers...> const&
+product_iterator<Containers...>::operator=(product_iterator const& other) {
+  if (current_tuple_ != nullptr) {
+    delete current_tuple_;
+    current_tuple_ = nullptr;
+  }
+  begin_ = other.begin_;
+  end_ = other.end_;
+  current_ = other.current_;
+
+  return *this;
+}
+
+template <class... Containers>
 product_iterator<Containers...>
 product_iterator<Containers...>::get_end() const {
-  product_iterator<Containers...> ret;
+  product_iterator<Containers...> ret(*this);
   ret.current_ = begin_;
-  ret.begin_ = begin_;
-  ret.end_ = end_;
   std::get<0>(ret.current_) = std::get<0>(ret.end_);
   return ret;
 }

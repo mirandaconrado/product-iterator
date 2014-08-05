@@ -78,9 +78,13 @@ class product_iterator:
     public:
       product_iterator();
 
+      product_iterator(product_iterator const& other);
+
       product_iterator(Containers const&... containers);
 
       ~product_iterator();
+
+      product_iterator const& operator=(product_iterator const& other);
 
       // Gets the end iterator to be compared
       product_iterator<Containers...> get_end() const;

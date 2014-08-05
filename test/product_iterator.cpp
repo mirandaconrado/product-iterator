@@ -60,3 +60,20 @@ TEST_F(ProductIteratorTest, DoubleLoop) {
 
   EXPECT_EQ(end, it);
 }
+
+TEST_F(ProductIteratorTest, CopyConstructor) {
+  auto it = make_product_iterator(v1, v2);
+  *it;
+  {
+    decltype(it) it2(it);
+  }
+}
+
+TEST_F(ProductIteratorTest, Assignment) {
+  auto it = make_product_iterator(v1, v2);
+  *it;
+  {
+    decltype(it) it2;
+    it2 = (it);
+  }
+}
