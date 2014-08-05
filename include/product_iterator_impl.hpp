@@ -47,8 +47,10 @@ product_iterator<Containers...>::~product_iterator() {
 template <class... Containers>
 product_iterator<Containers...>
 product_iterator<Containers...>::get_end() const {
-  product_iterator<Containers...> ret(*this);
+  product_iterator<Containers...> ret;
   ret.current_ = begin_;
+  ret.begin_ = begin_;
+  ret.end_ = end_;
   std::get<0>(ret.current_) = std::get<0>(ret.end_);
   return ret;
 }
