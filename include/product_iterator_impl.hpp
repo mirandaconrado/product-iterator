@@ -128,8 +128,16 @@ template <class... Containers>
 typename product_iterator<Containers...>::value_type const&
 product_iterator<Containers...>::dereference() const {
   if (current_tuple_ == nullptr)
-    current_tuple_ = new value_type(make_value_type<0>());
+    current_tuple_ = new value_type(make_value_type(
+          typename tuple_sequence_generator<value_type>::type()));
   return *current_tuple_;
+}
+
+template <class... Containers>
+template <size_t... S>
+typename product_iterator<Containers...>::value_type
+product_iterator<Containers...>::make_value_type(sequence<S...>) const {
+  return value_type(*std::get<S>(this->current_)...);
 }
 
 template <class... Containers>

@@ -75,6 +75,20 @@ class product_iterator:
         typename Containers::const_iterator...
       > iterator_type;
 
+      // Helper structs for tuple expanding
+      template <size_t...> struct sequence {};
+      template <size_t N, size_t... S>
+      struct sequence_generator: sequence_generator<N-1, N-1, S...> {};
+      template <size_t... S>
+      struct sequence_generator<0, S...> {
+        typedef sequence<S...> type;
+      };
+      template <class T>
+      struct tuple_sequence_generator {
+        typedef typename sequence_generator<std::tuple_size<T>::value>::type
+          type;
+      };
+
     public:
       product_iterator();
 
@@ -102,6 +116,10 @@ class product_iterator:
       bool equal(product_iterator<Containers...> const& other) const;
       value_type const& dereference() const;
 
+      // Helper method to dereference. Just get references from each iterator
+      // and builds a tuple of constant references.
+      template <size_t... S> value_type make_value_type(sequence<S...>) const;
+
       // Auxiliary methods to constructor to copy iterators to tuple
       template <size_t I, class T1, class... Types>
       void copy_iterator(T1 const& container, Types const&... containers);
@@ -127,53 +145,6 @@ class product_iterator:
       // this thing. We also can't keep a single copy because each element of
       // the tuple is a const&, so it can't be constructed by itself.
       mutable value_type* current_tuple_;
-
-      // Helper method to dereference. Just collect each tuple position of
-      // value_type as a reference to the current position. This is messy
-      // because value_type is a tuple of references.
-      // Although methods should be placed before member variables, this is an
-      // exception as we need access to this->current_ to define the method.
-      template <size_t I>
-      auto make_value_type(
-        typename std::enable_if<
-          (I==std::tuple_size<value_type>::value-1),
-          int
-        >::type = 0
-      ) const ->
-      decltype(
-        std::tuple<
-          typename std::tuple_element<I,value_type>::type const&
-        >(*std::get<I>(this->current_))
-      ) {
-        return
-        std::tuple<
-          typename std::tuple_element<I,value_type>::type const&
-        >(*std::get<I>(this->current_));
-      }
-
-      template <size_t I>
-      auto make_value_type(
-        typename std::enable_if<
-          (I<std::tuple_size<value_type>::value-1),
-          int
-        >::type = 0
-      ) const ->
-      decltype(
-        std::tuple_cat(
-          std::tuple<
-            typename std::tuple_element<I,value_type>::type const&
-          >(*std::get<I>(this->current_)),
-          make_value_type<I+1>()
-        )
-      ) {
-        return
-        std::tuple_cat(
-          std::tuple<
-            typename std::tuple_element<I,value_type>::type const&
-          >(*std::get<I>(this->current_)),
-          make_value_type<I+1>()
-        );
-      }
 };
 
 template <class... Containers>

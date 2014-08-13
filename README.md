@@ -2,8 +2,7 @@ Product Iterator
 =================
 
 C++ iterator that performs the cartesian product of many containers. Requires
-C++11 and boost. GCC 4.8.3 fails to compile the test case for some reason, so
-clang is used instead.
+C++11 and boost.
 
 All places I could find code to perform the cartesian product had at least one
 of the following issues:
