@@ -1,4 +1,5 @@
 #include "product_iterator.hpp"
+#include "iterator_proxy.hpp"
 
 #include <gtest/gtest.h>
 
@@ -22,6 +23,24 @@ class ProductIteratorTest: public ::testing::Test {
 
 TEST_F(ProductIteratorTest, DoubleLoop) {
   auto it = make_product_iterator(v1, v2);
+  auto end = it.get_end();
+
+  for (int i = min_i; i <= max_i; i++) {
+    for (int j = min_j; j <= max_j; j++) {
+      EXPECT_EQ(i, std::get<0>(*it));
+      EXPECT_EQ(i, it.get<0>());
+      EXPECT_EQ(j, std::get<1>(*it));
+      EXPECT_EQ(j, it.get<1>());
+      ++it;
+    }
+  }
+
+  EXPECT_EQ(end, it);
+}
+
+TEST_F(ProductIteratorTest, DoubleLoopProxy) {
+  auto it = make_product_iterator(make_iterator_proxy(v1.begin(), v1.end()),
+        make_iterator_proxy(v2.begin(), v2.end()));
   auto end = it.get_end();
 
   for (int i = min_i; i <= max_i; i++) {
