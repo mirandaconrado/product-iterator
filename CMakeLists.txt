@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 project(product-iterator CXX)
 
 find_package(GTest REQUIRED)
