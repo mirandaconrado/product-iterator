@@ -72,3 +72,19 @@ TEST_F(ProductIteratorTest, DoubleLoopProxy) {
 
   EXPECT_EQ(end, it);
 }
+
+TEST_F(ProductIteratorTest, BoolVector)
+{
+	const std::vector<bool> v1 = { true, false };
+	const std::vector<bool> v2 = { true };
+
+	auto it = make_product_iterator( v1, v2 );
+	const auto end = it.get_end();
+
+	EXPECT_TRUE( it.get<0>() );
+	EXPECT_TRUE( it.get<1>() );
+
+	++it;
+	EXPECT_FALSE( it.get<0>() );
+	EXPECT_TRUE( it.get<1>() );
+}
