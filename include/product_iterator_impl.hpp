@@ -53,16 +53,6 @@ product_iterator<Containers...>::get_end() const {
 }
 
 template <class... Containers>
-template <size_t I>
-typename
-std::tuple_element<I,typename product_iterator<Containers...>::value_type>::type
-const &
-product_iterator<Containers...>::get() const {
-  // As only a single value is needed, gathers it from its iterator.
-  return *std::get<I>(current_);
-}
-
-template <class... Containers>
 template <size_t I, class T1, class... Types>
 void product_iterator<Containers...>::copy_iterator(T1 const& container,
     Types const&... containers) {

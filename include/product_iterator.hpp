@@ -79,11 +79,7 @@ class product_iterator:
       // Gets the end iterator to be compared
       product_iterator<Containers...> get_end() const;
 
-      // Enables access to a single value instead of the whole tuple. This
-      // method is preffered to the operator* as it doesn't require tuple
-      // construction. Behaves like std::get<I>(*iterator).
-      template <size_t I>
-      typename std::tuple_element<I, value_type>::type const& get() const;
+      // See public get() member bellow private section
 
     private:
       // Boost stuff due to facade
@@ -121,6 +117,20 @@ class product_iterator:
       // this thing. We also can't keep a single copy because each element of
       // the tuple is a const&, so it can't be constructed by itself.
       mutable value_type* current_tuple_;
+
+    public:
+      // Enables access to a single value instead of the whole tuple. This
+      // method is preffered to the operator* as it doesn't require tuple
+      // construction. Behaves like std::get<I>(*iterator).
+      template <size_t I>
+      auto get() const -> decltype(*std::get<I>(current_)) {
+        // This function must come after the private section as it needs
+        // `current_` to be defined before it for use in the trailing return
+        // type.
+
+        // As only a single value is needed, gathers it from its iterator.
+        return *std::get<I>(current_);
+      }
 };
 
 template <class... Containers>
