@@ -1,9 +1,9 @@
-add_executable(run_tests.bin EXCLUDE_FROM_ALL
+include_directories(${GTEST_INCLUDE_DIRS})
+
+add_executable(product_iterator_test EXCLUDE_FROM_ALL
   product_iterator.cpp
 )
 
-target_link_libraries(run_tests.bin gtest gtest_main
-)
+target_link_libraries(product_iterator_test ${GTEST_BOTH_LIBRARIES})
 
-add_custom_target(test COMMAND run_tests.bin
-                       DEPENDS run_tests.bin)
+GTEST_ADD_TESTS(product_iterator_test "" product_iterator.cpp)

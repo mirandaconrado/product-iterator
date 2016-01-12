@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 2.6)
-project(product-iterator)
+cmake_minimum_required(VERSION 2.8)
+project(product-iterator CXX)
 
+include(CTest)
 find_package(GTest REQUIRED)
 
 include_directories(include)
